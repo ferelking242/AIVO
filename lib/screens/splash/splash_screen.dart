@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
+import '../home/home_screen.dart';
 import '../sign_in/sign_in_screen.dart';
 import 'components/splash_content.dart';
 
@@ -81,9 +82,16 @@ class _SplashScreenState extends State<SplashScreen> {
                       const Spacer(flex: 3),
                       ElevatedButton(
                         onPressed: () {
+                          Navigator.pushNamed(context, HomeScreen.routeName);
+                        },
+                        child: const Text("Continue as Guest"),
+                      ),
+                      const SizedBox(height: 12),
+                      OutlinedButton(
+                        onPressed: () {
                           Navigator.pushNamed(context, SignInScreen.routeName);
                         },
-                        child: const Text("Continue"),
+                        child: const Text("Sign In"),
                       ),
                       const Spacer(),
                     ],

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../chat/chat_screen.dart';
+import '../notifications/notifications_screen.dart';
+import '../settings/settings_screen.dart';
 import 'components/profile_menu.dart';
 import 'components/profile_pic.dart';
 
@@ -27,22 +30,27 @@ class ProfileScreen extends StatelessWidget {
             ProfileMenu(
               text: "Notifications",
               icon: "assets/icons/Bell.svg",
-              press: () {},
+              press: () => Navigator.pushNamed(context, NotificationsScreen.routeName),
             ),
             ProfileMenu(
               text: "Settings",
               icon: "assets/icons/Settings.svg",
-              press: () {},
+              press: () => Navigator.pushNamed(context, SettingsScreen.routeName),
+            ),
+            ProfileMenu(
+              text: "Chat Support",
+              icon: "assets/icons/Chat.svg",
+              press: () => Navigator.pushNamed(context, ChatScreen.routeName),
             ),
             ProfileMenu(
               text: "Help Center",
               icon: "assets/icons/Question mark.svg",
-              press: () {},
+              press: () => {},
             ),
             ProfileMenu(
               text: "Log Out",
               icon: "assets/icons/Log out.svg",
-              press: () {},
+              press: () => {},
             ),
           ],
         ),

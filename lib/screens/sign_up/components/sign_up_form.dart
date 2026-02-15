@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../components/custom_surfix_icon.dart';
 import '../../../components/form_error.dart';
 import '../../../constants.dart';
+import '../../../services/auth_service.dart';
 import '../../complete_profile/complete_profile_screen.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -137,11 +138,46 @@ class _SignUpFormState extends State<SignUpForm> {
           FormError(errors: errors),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                // if all are valid then go to success screen
-                Navigator.pushNamed(context, CompleteProfileScreen.routeName);
+                
+                // Show loading dialog
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+
+                try {
+                  // Try to sign up with Supabase
+                  await AuthService().signUp(
+                    email: email ?? '',
+                    password: password ?? '',
+                  );
+                  
+                  if (mounted) {
+                    Navigator.pop(context); // Close loading dialog
+                    Navigator.pushNamed(context, CompleteProfileScreen.routeName);
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    Navigator.pop(context); // Close loading dialog
+                    
+                    // Show error dialog
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Sign up failed: ${e.toString()}',
+                          maxLines: 3,
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
               }
             },
             child: const Text("Continue"),
