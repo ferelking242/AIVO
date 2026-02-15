@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../models/Product.dart';
+import '../providers/theme_provider.dart';
+import 'cached_image.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
@@ -17,8 +20,14 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final VoidCallback onPress;
 
+  bool _isNetworkImage(String path) {
+    return path.startsWith('http://') || path.startsWith('https://');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Provider.of<ThemeProvider>(context).isDarkMode;
+
     return SizedBox(
       width: width,
       child: GestureDetector(
@@ -31,10 +40,12 @@ class ProductCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: kSecondaryColor.withOpacity(0.1),
+                  color: isDark
+                    ? Colors.grey[800]
+                    : kSecondaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Image.asset(product.images[0]),
+                child: _buildImage(),
               ),
             ),
             const SizedBox(height: 8),
@@ -83,5 +94,21 @@ class ProductCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildImage() {
+    final imagePath = product.images[0];
+
+    if (_isNetworkImage(imagePath)) {
+      return CachedImage(
+        imageUrl: imagePath,
+        fit: BoxFit.contain,
+      );
+    } else {
+      return LocalImage(
+        assetPath: imagePath,
+        fit: BoxFit.contain,
+      );
+    }
   }
 }

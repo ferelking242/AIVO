@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aivo/providers/product_provider.dart';
+import 'package:aivo/providers/theme_provider.dart';
 import 'package:aivo/screens/splash/splash_screen.dart';
 
 import 'config/supabase_config.dart';
 import 'routes.dart';
 import 'services/auth_service.dart';
-import 'theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,19 +28,21 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'The Flutter Way - Template',
-        theme: AppTheme.lightTheme(context),
-        initialRoute: SplashScreen.routeName,
-        routes: routes,
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'AIVO - E-Commerce',
+          theme: themeProvider.getTheme(),
+          initialRoute: SplashScreen.routeName,
+          routes: routes,
+        ),
       ),
     );
   }
