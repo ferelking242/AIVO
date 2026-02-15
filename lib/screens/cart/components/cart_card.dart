@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../components/cached_image.dart';
 import '../../../constants.dart';
 import '../../../models/Cart.dart';
 
@@ -10,6 +11,10 @@ class CartCard extends StatelessWidget {
   }) : super(key: key);
 
   final Cart cart;
+
+  bool _isNetworkImage(String path) {
+    return path.startsWith('http://') || path.startsWith('https://');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,7 @@ class CartCard extends StatelessWidget {
                 color: const Color(0xFFF5F6F9),
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Image.asset(cart.product.images[0]),
+              child: _buildImage(cart.product.images[0]),
             ),
           ),
         ),
@@ -55,5 +60,19 @@ class CartCard extends StatelessWidget {
         )
       ],
     );
+  }
+
+  Widget _buildImage(String imagePath) {
+    if (_isNetworkImage(imagePath)) {
+      return CachedImage(
+        imageUrl: imagePath,
+        fit: BoxFit.contain,
+      );
+    } else {
+      return LocalImage(
+        assetPath: imagePath,
+        fit: BoxFit.contain,
+      );
+    }
   }
 }

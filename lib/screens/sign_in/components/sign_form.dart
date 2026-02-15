@@ -5,6 +5,7 @@ import '../../../components/form_error.dart';
 import '../../../constants.dart';
 import '../../../helper/keyboard.dart';
 import '../../../services/auth_service.dart';
+import '../../../services/biometric_auth_service.dart';
 import '../../forgot_password/forgot_password_screen.dart';
 import '../../login_success/login_success_screen.dart';
 
@@ -21,6 +22,22 @@ class _SignFormState extends State<SignForm> {
   String? password;
   bool? remember = false;
   final List<String?> errors = [];
+  bool _canUseBiometric = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkBiometricAvailability();
+  }
+
+  Future<void> _checkBiometricAvailability() async {
+    final canCheck = await BiometricAuthService.instance.canCheckBiometrics();
+    if (mounted) {
+      setState(() {
+        _canUseBiometric = canCheck;
+      });
+    }
+  }
 
   void addError({String? error}) {
     if (!errors.contains(error)) {
@@ -35,6 +52,41 @@ class _SignFormState extends State<SignForm> {
       setState(() {
         errors.remove(error);
       });
+    }
+  }
+
+  Future<void> _handleBiometricLogin() async {
+    try {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+
+      final email = await BiometricAuthService.instance.biometricLogin();
+
+      if (email != null && mounted) {
+        Navigator.pop(context); // Close loading dialog
+        Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+      } else if (mounted) {
+        Navigator.pop(context); // Close loading dialog
+        addError(error: "Biometric login failed");
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.pop(context); // Close loading dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Biometric login failed: ${e.toString()}',
+              maxLines: 3,
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -68,8 +120,6 @@ class _SignFormState extends State<SignForm> {
             decoration: const InputDecoration(
               labelText: "Email",
               hintText: "Enter your email",
-              // If  you are using latest version of flutter then lable text and hint text shown like this
-              // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
               suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Mail.svg"),
             ),
@@ -99,8 +149,6 @@ class _SignFormState extends State<SignForm> {
             decoration: const InputDecoration(
               labelText: "Password",
               hintText: "Enter your password",
-              // If  you are using latest version of flutter then lable text and hint text shown like this
-              // if you r using flutter less then 1.20.* then maybe this is not working properly
               floatingLabelBehavior: FloatingLabelBehavior.always,
               suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
             ),
@@ -136,8 +184,7 @@ class _SignFormState extends State<SignForm> {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
                 KeyboardUtil.hideKeyboard(context);
-                
-                // Show loading dialog
+
                 showDialog(
                   context: context,
                   barrierDismissible: false,
@@ -147,21 +194,18 @@ class _SignFormState extends State<SignForm> {
                 );
 
                 try {
-                  // Try to sign in with Supabase
                   await AuthService().signIn(
                     email: email ?? '',
                     password: password ?? '',
                   );
-                  
+
                   if (mounted) {
-                    Navigator.pop(context); // Close loading dialog
+                    Navigator.pop(context);
                     Navigator.pushNamed(context, LoginSuccessScreen.routeName);
                   }
                 } catch (e) {
                   if (mounted) {
-                    Navigator.pop(context); // Close loading dialog
-                    
-                    // Show error dialog
+                    Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -177,6 +221,14 @@ class _SignFormState extends State<SignForm> {
             },
             child: const Text("Continue"),
           ),
+          if (_canUseBiometric) ...[
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              onPressed: _handleBiometricLogin,
+              icon: const Icon(Icons.fingerprint),
+              label: const Text("Biometric Login"),
+            ),
+          ],
         ],
       ),
     );

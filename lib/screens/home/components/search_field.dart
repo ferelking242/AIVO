@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants.dart';
+import '../../search/search_screen.dart';
 
 class SearchField extends StatelessWidget {
   const SearchField({
@@ -11,6 +12,10 @@ class SearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Form(
       child: TextFormField(
+        onTap: () {
+          Navigator.pushNamed(context, SearchScreen.routeName);
+        },
+        readOnly: true,
         onChanged: (value) {},
         decoration: InputDecoration(
           filled: true,
@@ -32,3 +37,4 @@ const searchOutlineInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.all(Radius.circular(12)),
   borderSide: BorderSide.none,
 );
+

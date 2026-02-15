@@ -1,9 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:aivo/screens/products/products_screen.dart';
+import 'package:aivo/screens/search/search_screen.dart';
 
 import 'screens/cart/cart_screen.dart';
 import 'screens/complete_profile/complete_profile_screen.dart';
 import 'screens/details/details_screen.dart';
+import 'screens/favorite/favorite_screen.dart';
 import 'screens/forgot_password/forgot_password_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/init_screen.dart';
@@ -29,8 +31,10 @@ final Map<String, WidgetBuilder> routes = {
   OtpScreen.routeName: (context) => const OtpScreen(),
   HomeScreen.routeName: (context) => const HomeScreen(),
   ProductsScreen.routeName: (context) => const ProductsScreen(),
+  SearchScreen.routeName: (context) => const SearchScreen(),
   DetailsScreen.routeName: (context) => const DetailsScreen(),
   CartScreen.routeName: (context) => const CartScreen(),
+  FavoriteScreen.routeName: (context) => const FavoriteScreen(),
   ProfileScreen.routeName: (context) => const ProfileScreen(),
   NotificationsScreen.routeName: (context) => const NotificationsScreen(),
   SettingsScreen.routeName: (context) => const SettingsScreen(),

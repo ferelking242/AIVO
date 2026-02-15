@@ -149,8 +149,10 @@ class SkeletonDetailScreen extends StatelessWidget {
                 Container(
                   height: 48,
                   width: double.infinity,
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ],
             ),

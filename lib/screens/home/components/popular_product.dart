@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/product_card.dart';
+import '../../../components/skeleton_loaders.dart';
 import '../../../models/Product.dart';
 import '../../../providers/product_provider.dart';
 import '../../details/details_screen.dart';
@@ -43,9 +44,24 @@ class _PopularProductsState extends State<PopularProducts> {
               ),
             ),
             if (productProvider.isLoading)
-              const Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator(),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 20),
+                      ...List.generate(4, (_) => const Padding(
+                        padding: EdgeInsets.only(right: 20),
+                        child: SkeletonCard(
+                          height: 180,
+                          width: 140,
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                      )),
+                    ],
+                  ),
+                ),
               )
             else if (popularProducts.isEmpty)
               const Padding(

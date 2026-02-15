@@ -170,7 +170,7 @@ class ThemeProvider extends ChangeNotifier {
         color: Color(0xFF2d2d2d),
         elevation: 2,
       ),
-      elevatedButtonThemeData: ElevatedButtonThemeData(
+      elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColor,
           foregroundColor: Colors.white,

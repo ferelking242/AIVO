@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:aivo/components/product_card.dart';
+import 'package:aivo/components/skeleton_loaders.dart';
 import 'package:aivo/providers/product_provider.dart';
 
 import '../details/details_screen.dart';
 
 class FavoriteScreen extends StatefulWidget {
+  static const String routeName = "/favorites";
+
   const FavoriteScreen({super.key});
 
   @override
-  State<FavoriteScreen> createState() => _FavoriteScreenState();
+  State<FavoriteScreenState> createState() => _FavoriteScreenState();
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
@@ -37,7 +40,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               child: Consumer<ProductProvider>(
                 builder: (context, productProvider, child) {
                   if (productProvider.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const SkeletonProductCardList(itemCount: 6);
                   }
 
                   final favorites = productProvider.userFavorites;

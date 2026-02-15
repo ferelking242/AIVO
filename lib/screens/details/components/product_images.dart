@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../components/cached_image.dart';
 import '../../../constants.dart';
 import '../../../models/Product.dart';
 
@@ -17,6 +18,11 @@ class ProductImages extends StatefulWidget {
 
 class _ProductImagesState extends State<ProductImages> {
   int selectedImage = 0;
+
+  bool _isNetworkImage(String path) {
+    return path.startsWith('http://') || path.startsWith('https://');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,7 +31,7 @@ class _ProductImagesState extends State<ProductImages> {
           width: 238,
           child: AspectRatio(
             aspectRatio: 1,
-            child: Image.asset(widget.product.images[selectedImage]),
+            child: _buildImage(widget.product.images[selectedImage]),
           ),
         ),
         // SizedBox(height: 20),
@@ -49,6 +55,20 @@ class _ProductImagesState extends State<ProductImages> {
       ],
     );
   }
+
+  Widget _buildImage(String imagePath) {
+    if (_isNetworkImage(imagePath)) {
+      return CachedImage(
+        imageUrl: imagePath,
+        fit: BoxFit.contain,
+      );
+    } else {
+      return LocalImage(
+        assetPath: imagePath,
+        fit: BoxFit.contain,
+      );
+    }
+  }
 }
 
 class SmallProductImage extends StatefulWidget {
@@ -67,6 +87,10 @@ class SmallProductImage extends StatefulWidget {
 }
 
 class _SmallProductImageState extends State<SmallProductImage> {
+  bool _isNetworkImage(String path) {
+    return path.startsWith('http://') || path.startsWith('https://');
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -83,7 +107,15 @@ class _SmallProductImageState extends State<SmallProductImage> {
           border: Border.all(
               color: kPrimaryColor.withOpacity(widget.isSelected ? 1 : 0)),
         ),
-        child: Image.asset(widget.image),
+        child: _isNetworkImage(widget.image)
+            ? CachedImage(
+                imageUrl: widget.image,
+                fit: BoxFit.cover,
+              )
+            : LocalImage(
+                assetPath: widget.image,
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }
