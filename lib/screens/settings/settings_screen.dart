@@ -161,7 +161,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       );
     }
   }
-  }
 
   Widget _buildSectionTitle(String title) {
     return Padding(
