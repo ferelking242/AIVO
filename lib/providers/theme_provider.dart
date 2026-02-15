@@ -75,7 +75,7 @@ class ThemeProvider extends ChangeNotifier {
         surface: const Color(0xFFF5F5F5),
         error: const Color(0xFFE74C3C),
       ),
-      cardTheme: const CardTheme(
+      cardTheme: const CardThemeData(
         color: Colors.white,
         elevation: 2,
       ),
@@ -166,7 +166,7 @@ class ThemeProvider extends ChangeNotifier {
         surface: const Color(0xFF2d2d2d),
         error: const Color(0xFFE74C3C),
       ),
-      cardTheme: const CardTheme(
+      cardTheme: const CardThemeData(
         color: Color(0xFF2d2d2d),
         elevation: 2,
       ),

@@ -34,6 +34,7 @@ class SearchProvider extends ChangeNotifier {
   int get totalPages => (_totalItems / _itemsPerPage).ceil();
   bool get hasNextPage => _currentPage < totalPages;
   bool get hasPreviousPage => _currentPage > 1;
+  int get totalResults => _totalItems;
 
   SearchProvider() {
     _searchService.initSearch();

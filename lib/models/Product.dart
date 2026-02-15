@@ -20,6 +20,36 @@ class Product {
     required this.price,
     required this.description,
   });
+
+  /// Convert to JSON for offline storage
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'images': images,
+      'colors': colors.map((c) => c.value).toList(),
+      'rating': rating,
+      'price': price,
+      'isFavourite': isFavourite,
+      'isPopular': isPopular,
+    };
+  }
+
+  /// Create from JSON
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      images: List<String>.from(json['images'] as List),
+      colors: (json['colors'] as List).map((c) => Color(c)).toList(),
+      rating: json['rating']?.toDouble() ?? 0.0,
+      price: json['price']?.toDouble() ?? 0.0,
+      isFavourite: json['isFavourite'] ?? false,
+      isPopular: json['isPopular'] ?? false,
+    );
+  }
 }
 
 // Our demo Products

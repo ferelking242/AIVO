@@ -69,9 +69,6 @@ dependencies:
   # Secure Storage
   flutter_secure_storage: ^9.0.0
 
-  # Intl for i18n
-  intl: ^0.19.0
-
   # Preferences & Local Storage
   shared_preferences: ^2.2.0
 

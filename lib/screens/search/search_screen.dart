@@ -128,7 +128,7 @@ class _SearchScreenState extends State<SearchScreen> {
               // Results Grid
               Expanded(
                 child: searchProvider.isLoading
-                    ? const SkeletonProductCardList(itemCount: 6)
+                    ? const SkeletonProductCardList(count: 6)
                     : searchProvider.searchResults.isEmpty
                         ? Center(
                             child: Column(

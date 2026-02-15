@@ -8,6 +8,8 @@ class BiometricAuthService {
     return _instance;
   }
 
+  static BiometricAuthService get instance => _instance;
+
   BiometricAuthService._internal();
 
   final LocalAuthentication _localAuth = LocalAuthentication();

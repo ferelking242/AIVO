@@ -287,7 +287,7 @@ class ProductReviewCard extends StatelessWidget {
                   onPressed: () {
                     context
                         .read<ReviewProvider>()
-                        .markHelpful(widget.productId, review.id);
+                        .markHelpful(productId, review.id);
                   },
                   icon: const Icon(Icons.thumb_up),
                   label: Text('Helpful (${review.helpfulCount})'),

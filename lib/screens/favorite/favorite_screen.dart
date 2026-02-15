@@ -12,7 +12,7 @@ class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
 
   @override
-  State<FavoriteScreenState> createState() => _FavoriteScreenState();
+  State<FavoriteScreen> createState() => _FavoriteScreenState();
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
@@ -40,7 +40,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               child: Consumer<ProductProvider>(
                 builder: (context, productProvider, child) {
                   if (productProvider.isLoading) {
-                    return const SkeletonProductCardList(itemCount: 6);
+                    return const SkeletonProductCardList(count: 6);
                   }
 
                   final favorites = productProvider.userFavorites;

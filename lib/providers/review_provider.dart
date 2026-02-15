@@ -49,6 +49,16 @@ class ReviewProvider extends ChangeNotifier {
     return _productReviews[productId] ?? [];
   }
 
+  /// Alias for getProductReviews
+  List<ProductReview> getReviewsForProduct(String productId) {
+    return getProductReviews(productId);
+  }
+
+  /// Alias for fetchProductReviews
+  Future<void> fetchReviews(String productId) async {
+    await fetchProductReviews(productId);
+  }
+
   /// Add a review
   Future<bool> addReview({
     required String productId,
@@ -131,11 +141,11 @@ class ReviewProvider extends ChangeNotifier {
           ));
 
       if (review != null && review.id.isNotEmpty) {
-        review.helpfulCount++;
-
+        // Note: helpfulCount is final, so we would need to create a new object
+        // For now, we'll just update the database
         await _supabase
             .from('product_reviews')
-            .update({'helpful_count': review.helpfulCount})
+            .update({'helpful_count': (review.helpfulCount + 1)})
             .eq('id', reviewId);
 
         notifyListeners();
